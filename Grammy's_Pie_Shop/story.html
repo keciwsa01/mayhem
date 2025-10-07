@@ -1,1 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammy's Country Apple Pie - Interactive Adventure</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #F4A460 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: #2F1B14;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 248, 220, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #8B0000, #A0522D);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: "🦉";
+            position: absolute;
+            top: 10px;
+            left: 30px;
+            font-size: 2rem;
+        }
+
+        .header::after {
+            content: "🥧";
+            position: absolute;
+            top: 10px;
+            right: 30px;
+            font-size: 2rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #8B4513;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .tab-button.active {
+            background: #FFF8DC;
+            color: #8B4513;
+            border-bottom-color: #D2691E;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .location-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .two-column-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .location-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #D2691E;
+            transition: transform 0.3s ease;
+        }
+
+        .location-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .location-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #8B0000;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .read-aloud {
+            background: #F0E68C;
+            border-left: 4px solid #DAA520;
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
+            border-radius: 5px;
+        }
+
+        .stat-block {
+            background: #E6E6FA;
+            border: 2px solid #9370DB;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .creature-name {
+            font-weight: bold;
+            color: #4B0082;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .treasure-box {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #B8860B;
+        }
+
+        .accordion {
+            background: #F5F5DC;
+            border: 2px solid #8B4513;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: #8B4513;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: #A0522D;
+        }
+
+        .accordion-content {
+            padding: 20px;
+            display: none;
+        }
+
+        .accordion-content.active {
+            display: block;
+        }
+
+        .accordion-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        .location-tabs {
+            display: flex;
+            background: #D2691E;
+            border-radius: 10px 10px 0 0;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .location-tab-button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .location-tab-button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .location-tab-button.active {
+            background: #FFF8DC;
+            color: #8B4513;
+            border-bottom-color: #8B0000;
+        }
+
+        .location-tab-content {
+            background: #FFF8DC;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            min-height: 400px;
+        }
+
+        .embed-container {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #8B4513;
+            border-radius: 10px;
+            background: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .embed-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .embed-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .embed-button {
+            background: #8B4513;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .embed-button:hover {
+            background: #A0522D;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .puzzle-section {
+            background: #F5F5DC;
+            border: 3px dashed #8B4513;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .ingredient-dial {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .dial-button {
+            background: #D2691E;
+            color: white;
+            border: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .dial-button:hover {
+            background: #B8860B;
+            transform: scale(1.1);
+        }
+
+        .dial-button.selected {
+            background: #228B22;
+            box-shadow: 0 0 15px rgba(34, 139, 34, 0.5);
+        }
+
+        .xp-tracker {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #8B0000;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .warning-box {
+            background: #FFE4E1;
+            border: 2px solid #DC143C;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .search-container {
+            padding: 20px 30px 0;
+            background: rgba(255, 248, 220, 0.95);
+        }
+
+        #searchInput {
+            width: calc(100% - 10px);
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: 2px solid #8B4513;
+            border-radius: 25px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #searchInput:focus {
+            border-color: #D2691E;
+            box-shadow: 0 0 10px rgba(210, 105, 30, 0.3);
+        }
+
+        .search-results {
+            background: white;
+            border: 2px solid #8B4513;
+            border-radius: 10px;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .search-result-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-result-item:hover {
+            background: #F5F5DC;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-title {
+            font-weight: bold;
+            color: #8B0000;
+            margin-bottom: 5px;
+        }
+
+        .search-result-context {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .cross-reference {
+            display: inline-block;
+            background: #D2691E;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            margin: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cross-reference:hover {
+            background: #B8860B;
+            transform: scale(1.05);
+        }
+
+        .success-message {
+            background: #F0FFF0;
+            border: 2px solid #32CD32;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            color: #006400;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .xp-tracker {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 20px 0;
+            }
+            
+            .two-column-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Grammy's Country Apple Pie</h1>
+            <div class="subtitle">Two-Player Remix Adventure • Level 2 Characters • 2 Hours</div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('intro')">Introduction</button>
+            <button class="tab-button" onclick="showTab('locations')">Locations</button>
+            <button class="tab-button" onclick="showTab('creatures')">Creatures & NPCs</button>
+            <button class="tab-button" onclick="showTab('treasure')">Treasure</button>
+            <button class="tab-button" onclick="showTab('tools')">DM Tools</button>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="🔍 Search locations, creatures, treasure..." onkeyup="searchContent()">
+            <div id="searchResults" class="search-results"></div>
+        </div>
+
+        <div class="content">
+            <!-- Introduction Tab -->
+            <div id="intro" class="tab-content">
+                <div class="warning-box">
+                    <h3>🛡️ Important Note Before You Start</h3>
+                    <p><strong>All combat situations are avoidable!</strong> Players can use stealth, negotiation, deception, bribery, cleverness, or running away. Any combat can be de-escalated with a <strong>DC 13 Charisma or Wisdom check</strong> plus a creative solution. Pacifistic approaches give full XP!</p>
+                </div>
+
+                <h2>🏰 The Quest Begins</h2>
+                <div class="read-aloud">
+                    <p>"Although you were initially distrustful when the imp appeared at the door to let you into the old wizard's tower, inside you have seen enough benign wonders to assuage your concerns. A woven carpet bearing a sigil of an owl in mid-flight leads you up the winding staircase. Walls are decorated with portraits of owls in gilded frames and elegant candle sconces shaped like owl talons.</p>
+                    
+                    <p>At the top is the wizard's study, a room lined with bookshelves, bubbling potions, mysterious trinkets, and ink-stained scraps of parchment. An elderly man with long, wispy, white hair, milky eyes, and a large hooked nose sits in a cozy chair behind the desk. A stuffed snowy owl is perched atop one shelf, and feathered motifs decorate the chair cushions.</p>
+                    
+                    <p>He slowly stands and introduces himself as Tyndareus the Green. He pours you each a cup of tea and tells you why he summoned you here.</p>
+                    
+                    <p>'When I was a boy,' he says, smacking his lips, 'I tasted the most wonderful treat in all the Material Plane. Grammy's Country Apple Pies… The bakery was near my hometown and you could smell the spices all day and night, no matter where you were in town. Alas, when I went away to wizard college, the place was overrun by goblins and no one has dared go back in since. I'd like to taste those heavenly pies just once more before I depart for the Celestial Plane. If I give you a map to the bakery, can you go in and find Grammy's secret recipe for me?'"</p>
+                </div>
+
+                <div class="treasure-box">
+                    <h4>💰 Tyndareus's Offer</h4>
+                    <ul>
+                        <li><strong>50 gold pieces</strong></li>
+                        <li><strong>Any treasures found inside</strong></li>
+                        <li><strong>Special interest:</strong> A rust-colored leather pouch filled with mysterious black seeds</li>
+                    </ul>
+                </div>
+
+                <h3>🌙 An Unexpected Encounter</h3>
+                <div class="read-aloud">
+                    <p>As the players leave the tower, a cloaked traveler leans on a cane at the gate. Her face is obscured by a broad hood, and her voice is calm and cool.</p>
+                    
+                    <p>"Did the old man send you to fetch something sweet?" she asks.</p>
+                    
+                    <p>If the players confirm they accepted the quest, she smiles.</p>
+                    
+                    <p>"If you find a pouch of black seeds, I'll pay you five times what the old man offers. Just leave them for me outside the orchard fence, wrapped in this cloth."</p>
+                </div>
+
+                <div class="stat-block">
+                    <div class="creature-name">🔍 Mysterious Woman</div>
+                    <p><strong>Insight DC 14:</strong> She is hiding her true motives, but not necessarily lying. She will not give her name and vanishes into the woods shortly after.</p>
+                    <p><em>Her true nature remains mysterious, but her presence hints at a deeper conspiracy to be uncovered in future quests.</em></p>
+                </div>
+            </div>
+
+            <!-- Locations Tab -->
+            <div id="locations" class="tab-content hidden">
+                <h2>🗺️ Adventure Locations</h2>
+                
+                <div class="location-tabs">
+                    <button class="location-tab-button active" onclick="showLocationTab('entrance-orchard')">Entrance & Orchard</button>
+                    <button class="location-tab-button" onclick="showLocationTab('main-building')">Main Building</button>
+                    <button class="location-tab-button" onclick="showLocationTab('apartment-finale')">Apartment & Finale</button>
+                </div>
+
+                <div id="entrance-orchard" class="location-tab-content">
+                    <div class="location-grid">
+                        <!-- Location 1: Entrance -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🚪 1 – Entrance</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"As you approach the large stone building, the road turns into a gravel path surrounded by an overgrown lawn, leading toward a large set of wooden double doors. The fragrance of ripening apples is thick in the air from the old apple orchard in the back. There is one massive apple tree near the path to the front doors. As the wind whistles through the long grasses, you notice that the bark of the tree looks almost like an ancient, wizened face.</p>
+                                    <p>A rusted wind chime dangles above the entry, shaped like an owl with hollow eyes. Faded tiles set into the stone beneath your feet depict a stylized feather motif."</p>
+                                </div>
+                                
+                                <div class="stat-block">
+                                    <div class="creature-name">🌳 Mac the Treant</div>
+                                    <p><strong>HP:</strong> 93 | <strong>AC:</strong> 16 | <strong>STR:</strong> +6 | <strong>WIS:</strong> +3</p>
+                                    <p><strong>Abilities:</strong> Speak with Plants, Awaken Shrubs</p>
+                                    <p><strong>Clue:</strong> DC 12 Investigation/Charisma - Mac remembers Grammy often spoke with the dryads in the orchard.</p>
+                                </div>
+
+                                <p><strong>Door Entry:</strong> DC 14 Strength check to break rotting barricade</p>
+                                <p><strong>Goblin Patrols:</strong> Every 10 minutes, roll d6 - (1: Party sees goblins first, 6: Goblins flee, 2-5: Nothing)</p>
+                            </div>
+                        </div>
+
+                        <!-- Location 2: Apple Orchard -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🍎 2 – Apple Orchard</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"The scent of apples is even thicker here. The older trees are arranged in neat orderly rows, but the saplings that have sprouted since the goblins took over are everywhere. There is a whispering sound that doesn't seem to come from just the leaves rustling in the wind. Early ripened apples litter the ground. As you approach, one of them flies through the air, narrowly missing your heads. The sound of whispering is joined by the sound of giggling.</p>
+                                    <p>Looking up, you spot a woven owl-shaped ornament hanging from a branch. Its glassy eyes seem to follow your movements."</p>
+                                </div>
+                                
+                                <div class="stat-block">
+                                    <div class="creature-name">🧚 Dryads (x3)</div>
+                                    <p><strong>HP:</strong> 22 | <strong>AC:</strong> 11 | <strong>CHA:</strong> +2</p>
+                                    <p><strong>Abilities:</strong> Fey Charm, Tree Stride, Entangle (1/day)</p>
+                                    <p><strong>DC 13 Persuasion</strong> or a gift encourages them to talk</p>
+                                    <p><strong>DC 17 Persuasion/Investigation</strong> reveals:</p>
+                                    <ul>
+                                        <li>Half the recipe is in the office</li>
+                                        <li>Other half is in Grammy's apartment</li>
+                                        <li>Secret entrance through loading dock is safer</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location 3: Waste Pile -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🗑️ 3 – Waste Pile</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"What was once an orderly row of compost and waste bins has long since been heaped into a massive trash pile. It is overgrown with fungus and other decomposers taking advantage of the ready supply of food. It smells rancid, the odor carried on the breeze. Amid the mush and rot, you spot the remnants of pie boxes, ribbons, and a cracked ceramic garden owl, now half-buried under rotting fruit."</p>
+                                </div>
+                                
+                                <div class="stat-block">
+                                    <div class="creature-name">🍄 Violet Fungus</div>
+                                    <p><strong>HP:</strong> 11 | <strong>AC:</strong> 12</p>
+                                    <p><strong>Attack:</strong> Rotting Touch (1d6 necrotic), DC 11 CON save or speed halved</p>
+                                </div>
+
+                                <p><strong>Avoidance:</strong> DC 13 Stealth or DC 14 Survival</p>
+                                <p><strong>DC 15 Arcana/Nature:</strong> Pile absorbs magic unnaturally</p>
+                                
+                                <div class="treasure-box">
+                                    <strong>Treasure:</strong> 8 sp, brass owl locket (5 gp)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="main-building" class="location-tab-content" style="display: none;">
+                    <div class="location-grid">
+
+                        <!-- Location 4: Shop -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🏪 4 – Shop</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"The shop is a small front area of the bakery where Grammy's legendary pies were once sold. A counter at the back of the room stands surrounded by empty shelves. Bits of ribbon and boxes are strewn across the floor, and faded signs still hang, advertising the 'Autumn Owl Pie Special.' A carved wooden owl statuette sits toppled on a shelf, its eye sockets filled with dust."</p>
+                                </div>
+                                
+                                <div class="treasure-box">
+                                    <h4>💰 Hidden Cashbox</h4>
+                                    <p><strong>DC 14 Sleight of Hand</strong> or <strong>DC 16 Strength</strong> to open</p>
+                                    <ul>
+                                        <li>15 gp, 18 sp, 35 cp</li>
+                                        <li>Owl spectacles (10 gp value)</li>
+                                    </ul>
+                                </div>
+                                
+                                <p><strong>Investigation Opportunities:</strong></p>
+                                <ul>
+                                    <li>Discover and open cashbox</li>
+                                    <li>Identify goblin tracks</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Location 5: Office -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>📋 5 – Office</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"This well-appointed room, once the administrative heart of the bakery, features sturdy mahogany furniture and faded velvet curtains. Two desks stand overturned, their drawers ransacked and parchment scattered. The goblin stench is less pungent here. Bookcases line the walls, and above one hangs a brass owl clock, its wings outstretched, frozen at twelve."</p>
+                                </div>
+                                
+                                <div class="treasure-box">
+                                    <h4>🔒 Hidden Safe (behind bookshelf)</h4>
+                                    <p><strong>DC 13 Perception</strong> to find | <strong>DC 15 Sleight of Hand</strong> or <strong>DC 17 Strength</strong> to open</p>
+                                    <p><strong>Contents:</strong> 110 gp, 70 sp, 40 cp, brass owl-head signet ring (10 gp)</p>
+                                </div>
+
+                                <div class="warning-box">
+                                    <h4>⚠️ Trapped Drawer</h4>
+                                    <p><strong>DC 13 Perception</strong> to detect | <strong>DC 16 Dexterity</strong> to disarm</p>
+                                    <p><strong>Trap:</strong> Spring-loaded spoon (1 bludgeoning damage)</p>
+                                    <p><strong>Contents:</strong> Wooden owl paperweight, <strong>FIRST HALF OF RECIPE</strong>, bakery blueprints, guard's journal about "Tyn" (young Tyndareus!)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location 6: Guard Room -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🛡️ 6 – Guard Room</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"Although there was little need for it, Grammy employed a few young folks from the nearby town to serve as guards—more to keep them out of trouble than for any real protection. This small room once served as their break area and supply store. Three quarterstaffs have fallen to the floor where they once stood in a barrel. A table and two chairs have been overturned, and cobwebs hang from a dusty chandelier shaped like an owl with spread wings."</p>
+                                </div>
+                                
+                                <div class="treasure-box">
+                                    <h4>📦 Chest Contents</h4>
+                                    <p><strong>DC 15 Dexterity</strong> or <strong>DC 17 Strength</strong> to open</p>
+                                    <ul>
+                                        <li>3 vials of Shillelagh Oil</li>
+                                        <li>12 gp in "Guard Pay" pouch</li>
+                                        <li><strong>Unmarked backup key to Grammy's apartment</strong></li>
+                                    </ul>
+                                </div>
+
+                                <p><strong>Quarterstaffs:</strong> Poor condition - break on 5-6 if attack misses</p>
+                            </div>
+                        </div>
+
+                        <!-- Location 7: Loading Dock -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🚛 7 – Loading Dock</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"A sliding wooden door opens into a room with bare stone floors and plain walls. An empty wagon stands abandoned in the room, gathering dust. Packing crates, rotted flour sacks, and dented pie tins are strewn about. A hooting wind sounds faintly through a broken windowpane, which features stained-glass remnants of an owl with a pastry clutched in its talons. From here, you can see deeper into the bakery—rows of baking benches and the back of an iron oven."</p>
+                                </div>
+                                
+                                <div class="stat-block">
+                                    <div class="creature-name">👹 Goblin Patrol</div>
+                                    <p>1 oblivious goblin patrols, humming and juggling apples</p>
+                                    <p><strong>DC 13 Stealth</strong> to enter undetected</p>
+                                    <p>Failing may alert goblin (flees unless cornered)</p>
+                                </div>
+
+                                <div class="treasure-box">
+                                    <h4>🔍 Hidden Wagon Compartment</h4>
+                                    <p><strong>DC 12 Investigation</strong> reveals hidden storage</p>
+                                    <p><strong>Contents:</strong> 5 gp, letter from "Basil Featherwise" requesting deliveries</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location 8: Bakery Floor -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>👨‍🍳 8 – Bakery Floor</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"The bakery floor is a wide, open space with high ceilings and exposed wooden beams. The echoes of your steps bounce around the room. Two stone rooms stand on one side, each with a heavy barred door. Between them, a small glass cabinet holds an even smaller mallet on a chain.</p>
+                                    <p>Six long workbenches fill the center of the room, covered with dusty pie tins, rolling pins, and enchanted knives that twitch now and then as if remembering how to chop. Some rolling pins roll lazily on their own, propelled by faded magic. Across the room, six massive ovens open and shut rhythmically.</p>
+                                    <p>Above, carved wooden owls peer down from the rafters, their amber eyes cracked but still glimmering in the dusty light."</p>
+                                </div>
+                                
+                                <div class="stat-block">
+                                    <div class="creature-name">👹 Goblin Bakers (3)</div>
+                                    <p><strong>HP:</strong> 7 | <strong>AC:</strong> 15</p>
+                                    <p>Curious and pie-addicted, not hostile unless attacked</p>
+                                    <p><strong>DC 14 Persuasion/Deception/Intimidation</strong> to negotiate</p>
+                                    <p>Cannot read but remember what's shown to them</p>
+                                </div>
+
+                                <div class="warning-box">
+                                    <h4>🔥 Oven Elementals</h4>
+                                    <p><strong>Six massive ovens</strong> open and shut rhythmically. Each contains fire elementals that are not hostile unless provoked.</p>
+                                    <p><strong>Investigation DC 15:</strong> Ovens contain various fire creatures</p>
+                                </div>
+
+                                <p><strong>Cold Storage:</strong> DC 15 Perception finds valuable spices (5 gp each): cinnamon, nutmeg, ginger, cloves</p>
+                                <p><strong>Cooling Runes:</strong> DC 13 Arcana - copyable magical refrigeration</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="apartment-finale" class="location-tab-content" style="display: none;">
+                    <div class="location-grid">
+
+                        <!-- Location 9: Puzzle Lock -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🧩 9 – Grammy's Apartment (Puzzle Locked)</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"Tucked behind a cleverly disguised pantry door is a narrow stairwell winding upward. The door is marked only by a faint outline of floury fingerprints and the smell of apples. A faded bronze plaque shows an owl perched atop a pie crust with a small inscription below. As you approach, you hear a faint click—the stairs are barred by invisible magic."</p>
+                                </div>
+                                
+                                <div class="accordion">
+                                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                                        <span>🧠 Interactive Puzzle</span>
+                                        <span class="accordion-arrow">▼</span>
+                                    </div>
+                                    <div class="accordion-content">
+                                        <div class="embed-controls">
+                                            <button class="embed-button" onclick="resizeEmbed('small')">Small</button>
+                                            <button class="embed-button" onclick="resizeEmbed('medium')">Medium</button>
+                                            <button class="embed-button" onclick="resizeEmbed('large')">Large</button>
+                                            <button class="embed-button" onclick="openPuzzleTab()">Open in New Tab</button>
+                                        </div>
+                                        <div class="embed-container" id="puzzleEmbed">
+                                            <p>🧩 Puzzle Embed Area</p>
+                                            <p>Paste your puzzle URL below and click Load:</p>
+                                            <input type="text" id="puzzleUrl" placeholder="Enter puzzle URL..." style="width: 80%; padding: 8px; margin: 10px;">
+                                            <button class="embed-button" onclick="loadPuzzle()">Load Puzzle</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="warning-box">
+                                    <h4>🔧 Alternative Solutions</h4>
+                                    <p><strong>Riddle Answer:</strong> "Pie" (spoken aloud or written in flour)</p>
+                                    <p><strong>Ingredient Lock:</strong> Apple → Sugar → Cinnamon → Flour</p>
+                                    <p><strong>Backup Key:</strong> Found in Guard Room chest</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location 10: Grammy's Apartment -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🏠 10 – Inside Grammy's Apartment</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"The air is warm and filled with the lingering scent of apples, cloves, and lavender. The apartment—once the home of the famed Grammy herself—has become a chaotic den. Torn curtains hang from thick wooden rods, a bedframe without a mattress leans crookedly in one corner, and cabinets are stuffed with mismatched cookware and goblin hoards. Despite the mess, a sense of hominess still clings to the space.</p>
+                                    <p>One shelf holds a collection of ceramic owl figurines, most intact, others chipped or scratched. One wears a pink bonnet. Near the hearth, an old rocking chair creaks ever so slightly, though no one sits in it."</p>
+                                </div>
+                                
+                                <div class="stat-block">
+                                    <div class="creature-name">👹 Ruckwort the Pie Boss + 2 Goblins</div>
+                                    <p><strong>Ruckwort:</strong> HP 27 | AC 17 | Multiattack, Nimble Escape</p>
+                                    <p><strong>Goblins:</strong> HP 7 | AC 15</p>
+                                    <p>Can be negotiated with, distracted, or avoided with stealth</p>
+                                </div>
+
+                                <div class="warning-box">
+                                    <h4>⚠️ Trapped Desk Drawer</h4>
+                                    <p><strong>DC 13 Perception</strong> to spot | <strong>DC 16 Dexterity</strong> to disarm</p>
+                                    <p><strong>Trap:</strong> Spring-loaded spoon (1 bludgeoning damage)</p>
+                                    <p><strong>Contents:</strong> <strong>SECOND HALF OF RECIPE</strong>, mysterious black seeds in pie-shaped box</p>
+                                </div>
+
+                                <div class="warning-box">
+                                    <h4>📜 Grammy's Warning Note</h4>
+                                    <p><em>"Do not plant these again. I was wrong to try. They were beautiful, once... but the tree turned on us. We had to burn the thing after the orchard boys cut it down. It took the composter with it. If you're reading this, may the ashes stay buried." — G</em></p>
+                                </div>
+
+                                <div class="treasure-box">
+                                    <h4>💰 Additional Treasure</h4>
+                                    <ul>
+                                        <li>20 gp, 15 sp</li>
+                                        <li>Small topaz (30 gp) - hidden in sugar tin behind rocking chair</li>
+                                        <li>Spell notebook: Druidcraft, Entangle, Purify Food and Drink, Speak with Plants</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location 11: Finale -->
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🎉 11 – Finale</span>
+                                <span class="accordion-arrow">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="read-aloud">
+                                    <p>"As you return to Tyndareus's tower, the sun is setting behind the golden hills. The wizard awaits you in his owl-adorned study, his imp servant bouncing with excitement. When you present the complete recipe and the black seed pouch, Tyndareus's milky eyes widen, and he nearly drops his teacup.</p>
+                                    <p>'You found it… the full recipe… and the seeds too! Oh my stars!' he exclaims. He fits the pieces of parchment together and casts Mending, the recipe restored. He picks up the seed pouch, sniffs it briefly, and frowns.</p>
+                                    <p>'Curious… these smell stronger than I remember. Best not include them in the baking just yet,' he mutters, and slips the pouch into a drawer lined with magical wards."</p>
+                                    <p>He rummages around and produces a rust-colored leather Bag of Tricks, along with 50 gp in a velvet coin pouch labeled "Pie Day Fund."</p>
+                                    <p>Moments later, the imp reappears with a steaming pie. Tyndareus slices it gently.</p>
+                                    <p>"Would you care for a bite? It is, after all, the best pie in the world." 🍎🥧</p>
+                                </div>
+                                
+                                <div class="treasure-box">
+                                    <h4>🎁 Final Rewards</h4>
+                                    <ul>
+                                        <li><strong>Bag of Tricks (Rust)</strong></li>
+                                        <li><strong>50 gp</strong> "Pie Day Fund"</li>
+                                        <li><strong>Fresh Grammy's Apple Pie!</strong></li>
+                                    </ul>
+                                </div>
+
+                                <p><strong>Completion Rewards:</strong></p>
+                                <ul>
+                                    <li>Return full recipe and seeds: Best outcome</li>
+                                    <li>Return recipe only: Good outcome</li>
+                                    <li>Return partial or just seeds: Partial success</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Creatures Tab -->
+            <div id="creatures" class="tab-content hidden">
+                <h2>👹 Creatures & NPCs</h2>
+                
+                <div class="two-column-grid">
+                    <div class="column">
+                        <div class="stat-block">
+                            <div class="creature-name">🌳 Mac the Treant</div>
+                            <p><strong>HP:</strong> 93 | <strong>AC:</strong> 16</p>
+                            <p><strong>STR:</strong> +6 | <strong>WIS:</strong> +3 | <strong>INT:</strong> +2</p>
+                            <p><strong>Abilities:</strong> Speak with Plants, Awaken Shrubs</p>
+                            <p><strong>Personality:</strong> Grumpy, protective of nature</p>
+                            <p><strong>XP:</strong> 100 (if pacified or spoken with)</p>
+                        </div>
+
+                        <div class="stat-block">
+                            <div class="creature-name">🧚 Dryads (x3)</div>
+                            <p><strong>HP:</strong> 22 | <strong>AC:</strong> 11</p>
+                            <p><strong>DEX:</strong> +2 | <strong>CHA:</strong> +2</p>
+                            <p><strong>Abilities:</strong> Fey Charm, Tree Stride, Entangle (1/day)</p>
+                            <p><strong>Personality:</strong> Reclusive fey who hate goblins but can be charmed</p>
+                            <p><strong>XP:</strong> 150 (if befriended), 25 (if offended)</p>
+                        </div>
+
+                        <div class="stat-block">
+                            <div class="creature-name">🍄 Violet Fungus</div>
+                            <p><strong>HP:</strong> 11 | <strong>AC:</strong> 12 | <strong>Speed:</strong> 10 ft</p>
+                            <p><strong>Attack:</strong> Rotting Touch (1d6 necrotic)</p>
+                            <p><strong>Special:</strong> DC 11 CON save or speed halved</p>
+                            <p><strong>XP:</strong> 75 (defeated), 100 (avoided)</p>
+                        </div>
+
+                        <div class="stat-block">
+                            <div class="creature-name">👹 Goblin (Standard)</div>
+                            <p><strong>HP:</strong> 7 | <strong>AC:</strong> 15</p>
+                            <p><strong>DEX:</strong> +2 | <strong>Stealth:</strong> +6</p>
+                            <p><strong>Attacks:</strong> Scimitar (1d6+2), Shortbow (1d6+2)</p>
+                            <p><strong>XP:</strong> 50 each</p>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="stat-block">
+                            <div class="creature-name">👹 Ruckwort the Pie Boss</div>
+                            <p><strong>HP:</strong> 27 | <strong>AC:</strong> 17</p>
+                            <p><strong>Multiattack:</strong> 2x Scimitar (1d6+2)</p>
+                            <p><strong>Nimble Escape:</strong> Disengage or Hide as bonus action</p>
+                            <p><strong>Personality:</strong> Self-declared goblin chef in crust-stained apron and mashed-berry crown</p>
+                            <p><strong>XP:</strong> 150 (social), 100 (combat)</p>
+                        </div>
+
+                        <div class="stat-block" id="oven-elementals">
+                            <div class="creature-name">🔥 Oven Elementals</div>
+                            <p><strong>Magmins (1d3):</strong> HP 9 | AC 14 | Death Burst (2d6 fire)</p>
+                            <p><strong>Smoke Mephits (1d4):</strong> HP 22 | AC 12 | Blinding breath</p>
+                            <p><strong>Magma Mephits (1d4):</strong> HP 22 | AC 11 | Fire breath & death burst</p>
+                            <p><strong>Fire Snake:</strong> HP 22 | AC 14 | Multiattack + fire damage</p>
+                            <p><strong>Note:</strong> Not hostile unless provoked</p>
+                        </div>
+
+                        <div class="stat-block">
+                            <div class="creature-name">🧙 Tyndareus the Green</div>
+                            <p><strong>HP:</strong> 44 | <strong>AC:</strong> 12</p>
+                            <p><strong>Abilities:</strong> Prestidigitation, Mending, Mage Hand, Zone of Truth (1/day)</p>
+                            <p><strong>Personality:</strong> Elderly wizard with owl obsession and secret romantic past</p>
+                            <p><strong>Background:</strong> Once courted by a guard at Grammy's bakery in his youth</p>
+                        </div>
+
+                        <div class="stat-block">
+                            <div class="creature-name">👹 Imp Servant</div>
+                            <p><strong>HP:</strong> 10 | <strong>AC:</strong> 13</p>
+                            <p><strong>Special:</strong> Often invisible, mischievous but not hostile</p>
+                            <p><strong>Role:</strong> Tyndareus's loyal servant and pie delivery assistant</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Treasure Tab -->
+            <div id="treasure" class="tab-content hidden">
+                <h2>💰 Treasure Summary</h2>
+                
+                <div class="treasure-box">
+                    <h3>💎 Total Treasure Value</h3>
+                    <p><strong>Estimated Total:</strong> ~252 gp worth of currency + valuable magic items</p>
+                </div>
+
+                <div class="two-column-grid">
+                    <div class="column">
+                        <div class="treasure-box">
+                            <h4>🏪 Shop (Area 4)</h4>
+                            <ul>
+                                <li>15 gp, 18 sp, 35 cp</li>
+                                <li>Owl spectacles (10 gp)</li>
+                            </ul>
+                        </div>
+
+                        <div class="treasure-box">
+                            <h4>📋 Office (Area 5)</h4>
+                            <ul>
+                                <li>110 gp, 70 sp, 40 cp</li>
+                                <li>Brass owl signet ring (10 gp)</li>
+                                <li><strong>First half of recipe</strong></li>
+                            </ul>
+                        </div>
+
+                        <div class="treasure-box">
+                            <h4>🛡️ Guard Room (Area 6)</h4>
+                            <ul>
+                                <li>12 gp</li>
+                                <li>3 vials of Shillelagh Oil</li>
+                                <li>Backup apartment key</li>
+                            </ul>
+                        </div>
+
+                        <div class="treasure-box">
+                            <h4>🚛 Loading Dock (Area 7)</h4>
+                            <ul>
+                                <li>5 gp</li>
+                                <li>Letter from Basil Featherwise</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="treasure-box">
+                            <h4>👨‍🍳 Bakery Floor (Area 8)</h4>
+                            <ul>
+                                <li>Spices (5 gp each): cinnamon, nutmeg, cloves, ginger</li>
+                                <li>Random healing potions (see potion table)</li>
+                                <li>Cooling rune knowledge</li>
+                            </ul>
+                        </div>
+
+                        <div class="treasure-box">
+                            <h4>🏠 Grammy's Apartment</h4>
+                            <ul>
+                                <li>20 gp, 15 sp</li>
+                                <li>Small topaz (30 gp)</li>
+                                <li><strong>Second half of recipe</strong></li>
+                                <li><strong>Pouch of black seeds</strong></li>
+                                <li>Spell notebook (Druidcraft, Entangle, Purify Food and Drink, Speak with Plants)</li>
+                            </ul>
+                        </div>
+
+                        <div class="treasure-box">
+                            <h4>🎁 Tyndareus's Reward</h4>
+                            <ul>
+                                <li>50 gp "Pie Day Fund"</li>
+                                <li><strong>Bag of Tricks (Rust)</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h3>🌙 Alternative Reward Path</h3>
+                    <p><strong>Mysterious Woman's Offer:</strong> 5x Tyndareus's payment (250 gp) for the black seeds alone</p>
+                    <p><em>Players must choose between helping Tyndareus complete his nostalgic quest or taking the mysterious woman's lucrative offer...</em></p>
+                </div>
+            </div>
+
+            <!-- Tools Tab -->
+            <div id="tools" class="tab-content hidden">
+                <h2>🎲 DM Tools</h2>
+                
+                <div class="two-column-grid">
+                    <div class="column">
+                        <div class="table-container">
+                            <h3>🎲 Random Tables</h3>
+                            
+                            <h4>Goblin Patrol Check (d6)</h4>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr style="background: #8B4513; color: white;">
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Roll</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Result</th>
+                                </tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">1</td><td style="border: 1px solid #ddd; padding: 8px;">Party sees goblins first (1d4 goblins)</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">2-5</td><td style="border: 1px solid #ddd; padding: 8px;">Nothing happens</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">6</td><td style="border: 1px solid #ddd; padding: 8px;">Goblins see party first and flee</td></tr>
+                            </table>
+                            
+                            <h4>Potion Cabinet Contents (d4)</h4>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr style="background: #8B4513; color: white;">
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Roll</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Contents</th>
+                                </tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">1</td><td style="border: 1px solid #ddd; padding: 8px;">2 Potions of Healing, 1 Potion of Climbing</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">2</td><td style="border: 1px solid #ddd; padding: 8px;">1 Potion of Healing, 1 Potion of Gaseous Form, 1 Potion of Barkskin</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">3</td><td style="border: 1px solid #ddd; padding: 8px;">2 Potions of Healing, 1 Potion of Animal Friendship</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">4</td><td style="border: 1px solid #ddd; padding: 8px;">1 Potion of Healing, 1 Potion of Invisibility, 1 Potion of Resistance</td></tr>
+                            </table>
+                            
+                            <h4 id="oven-table">Oven Elemental Contents (d4)</h4>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr style="background: #8B4513; color: white;">
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Roll</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Elemental</th>
+                                </tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">1</td><td style="border: 1px solid #ddd; padding: 8px;">1d3 Magmins (HP: 9, AC: 14, Death Burst)</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">2</td><td style="border: 1px solid #ddd; padding: 8px;">1d4 Smoke Mephits (HP: 22, AC: 12, Blinding Breath)</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">3</td><td style="border: 1px solid #ddd; padding: 8px;">1d4 Magma Mephits (HP: 22, AC: 11, Fire Breath)</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">4</td><td style="border: 1px solid #ddd; padding: 8px;">1 Fire Snake (HP: 22, AC: 14, Multiattack)</td></tr>
+                            </table>
+
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="table-container">
+                            <h4>Damage Type for Resistance Potion (d10)</h4>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr style="background: #8B4513; color: white;">
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Roll</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Damage Type</th>
+                                </tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">1</td><td style="border: 1px solid #ddd; padding: 8px;">Acid</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">2</td><td style="border: 1px solid #ddd; padding: 8px;">Cold</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">3</td><td style="border: 1px solid #ddd; padding: 8px;">Fire</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">4</td><td style="border: 1px solid #ddd; padding: 8px;">Force</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">5</td><td style="border: 1px solid #ddd; padding: 8px;">Lightning</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">6</td><td style="border: 1px solid #ddd; padding: 8px;">Necrotic</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">7</td><td style="border: 1px solid #ddd; padding: 8px;">Poison</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">8</td><td style="border: 1px solid #ddd; padding: 8px;">Psychic</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">9</td><td style="border: 1px solid #ddd; padding: 8px;">Radiant</td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">10</td><td style="border: 1px solid #ddd; padding: 8px;">Thunder</td></tr>
+                            </table>
+                        </div>
+
+                        <div class="stat-block">
+                            <h3>📊 Quick Reference DCs</h3>
+                            <ul>
+                                <li><strong>Easy:</strong> DC 11-12</li>
+                                <li><strong>Medium:</strong> DC 13-14</li>
+                                <li><strong>Hard:</strong> DC 15-16</li>
+                                <li><strong>Very Hard:</strong> DC 17+</li>
+                            </ul>
+                            
+                            <h4>Common Checks in This Adventure:</h4>
+                            <ul>
+                                <li>Perception (traps, hidden items): DC 13-15</li>
+                                <li>Persuasion (social encounters): DC 13-14</li>
+                                <li>Stealth (avoiding encounters): DC 13</li>
+                                <li>Investigation (finding clues): DC 12-15</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="warning-box">
+                        <h3>⚡ Combat De-escalation</h3>
+                        <p><strong>Universal Rule:</strong> Any combat can be de-escalated with:</p>
+                        <ul>
+                            <li><strong>DC 13 Charisma or Wisdom check</strong></li>
+                            <li><strong>Plus a creative solution from players</strong></li>
+                            <li>Pacifistic approaches give <strong>full XP</strong></li>
+                        </ul>
+                        
+                        <h4>Alternative Solutions:</h4>
+                        <ul>
+                            <li>Stealth (sneak past)</li>
+                            <li>Negotiation (talk it out)</li>
+                            <li>Deception (trick them)</li>
+                            <li>Bribery (offer something valuable)</li>
+                            <li>Cleverness (environmental solutions)</li>
+                            <li>Running away (tactical retreat)</li>
+                        </ul>
+                    </div>
+
+                    <div class="treasure-box">
+                        <h3>🎭 Roleplay Notes</h3>
+                        
+                        <h4>Tyndareus's Secret</h4>
+                        <p>The guard's journal reveals young "Tyn" was romantically involved with Grammy's staff. This adds emotional weight to his quest - it's not just about the pie, but about recapturing lost youth and love.</p>
+                        
+                        <h4>Goblin Personalities</h4>
+                        <ul>
+                            <li><strong>Bakery Goblins:</strong> Pie-obsessed, curious, not malicious</li>
+                            <li><strong>Ruckwort:</strong> Proud "chef," wears berry crown, protective of "his" kitchen</li>
+                            <li><strong>Patrol Goblin:</strong> Oblivious, humming, juggling apples</li>
+                        </ul>
+                        
+                        <h4>The Mystery Seeds</h4>
+                        <p>Grammy's warning suggests these seeds create corrupted plants. The mysterious woman's interest hints at darker purposes. Perfect hook for future adventures!</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3>🎭 Contingency Plans for Chaotic Players</h3>
+                        
+                        <h4>🔥 "We Burn Everything Down!"</h4>
+                        <ul>
+                            <li><strong>Mac the Treant</strong> awakens and becomes hostile if fire threatens the orchard</li>
+                            <li><strong>Dryads</strong> cast Entangle and flee, calling for nature's revenge</li>
+                            <li><strong>Fire spreads:</strong> DC 15 Athletics/Acrobatics every round or take 1d6 fire damage</li>
+                            <li><strong>Recipe burns:</strong> Tyndareus is heartbroken but still pays half reward for trying</li>
+                            <li><strong>Consequence:</strong> Local druids and rangers become hostile to the party</li>
+                        </ul>
+                        
+                        <h4>⚔️ "Murder All the Goblins!"</h4>
+                        <ul>
+                            <li><strong>Ruckwort flees</strong> and returns with 2d4 goblin reinforcements</li>
+                            <li><strong>Oven elementals</strong> become agitated by violence, all ovens activate</li>
+                            <li><strong>Bakery catches fire</strong> from elemental chaos (see fire rules above)</li>
+                            <li><strong>Recipe survives</strong> if players are quick, but building becomes unstable</li>
+                            <li><strong>Moral consequence:</strong> Tyndareus is disappointed in their methods</li>
+                        </ul>
+                        
+                        <h4>💰 "We Keep Everything!"</h4>
+                        <ul>
+                            <li><strong>Tyndareus casts Zone of Truth</strong> when they return</li>
+                            <li><strong>If they lie:</strong> His imp follows them invisibly and reports back</li>
+                            <li><strong>If they're honest:</strong> He's sad but understanding, pays 25 gp for their honesty</li>
+                            <li><strong>Mysterious woman</strong> still appears and offers her deal</li>
+                            <li><strong>Future consequence:</strong> Tyndareus won't hire them again</li>
+                        </ul>
+                        
+                        <h4>🌱 "We Plant the Evil Seeds!"</h4>
+                        <ul>
+                            <li><strong>Immediate:</strong> DC 16 Constitution save or be poisoned for 1 hour</li>
+                            <li><strong>24 hours later:</strong> Twisted apple tree sprouts (use Awakened Tree stats)</li>
+                            <li><strong>Tree attacks:</strong> Anyone who approaches, spreads corrupted fruit</li>
+                            <li><strong>Environmental:</strong> 100-foot radius becomes difficult terrain</li>
+                            <li><strong>Solution:</strong> Must be burned or blessed to stop spreading</li>
+                            <li><strong>Hook:</strong> Perfect setup for a follow-up adventure!</li>
+                        </ul>
+                        
+                        <h4>🏃 "We Just Leave!"</h4>
+                        <ul>
+                            <li><strong>Tyndareus is understanding</strong> but disappointed</li>
+                            <li><strong>Pays 10 gp</strong> for their time and honesty</li>
+                            <li><strong>Mysterious woman</strong> approaches them later with a different job</li>
+                            <li><strong>Goblins eventually</strong> overrun the nearby town</li>
+                            <li><strong>Future hook:</strong> Town guard hires them to deal with goblin problem</li>
+                        </ul>
+                        
+                        <h4>🤝 "We Join the Goblins!"</h4>
+                        <ul>
+                            <li><strong>Ruckwort is delighted</strong> and makes them "honorary pie assistants"</li>
+                            <li><strong>Goblins share</strong> their terrible pie recipes and stolen treasure</li>
+                            <li><strong>They learn</strong> goblins are just hungry and homeless, not evil</li>
+                            <li><strong>Alternative quest:</strong> Help goblins find a new home</li>
+                            <li><strong>Tyndareus</strong> is initially upset but comes around if they bring him pie</li>
+                            <li><strong>XP bonus:</strong> Creative solution deserves full XP + 50 bonus</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab and mark button as active
+            document.getElementById(tabName).classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+        
+        function showLocationTab(tabName) {
+            // Hide all location tab contents
+            const contents = document.querySelectorAll('.location-tab-content');
+            contents.forEach(content => content.style.display = 'none');
+            
+            // Remove active class from all location tab buttons
+            const buttons = document.querySelectorAll('.location-tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected location tab and mark button as active
+            document.getElementById(tabName).style.display = 'block';
+            event.target.classList.add('active');
+        }
+        
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('.accordion-arrow');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                arrow.classList.remove('rotated');
+            } else {
+                content.classList.add('active');
+                arrow.classList.add('rotated');
+            }
+        }
+        
+        function resizeEmbed(size) {
+            const embed = document.getElementById('puzzleEmbed');
+            switch(size) {
+                case 'small':
+                    embed.style.height = '300px';
+                    break;
+                case 'medium':
+                    embed.style.height = '500px';
+                    break;
+                case 'large':
+                    embed.style.height = '700px';
+                    break;
+            }
+        }
+        
+        function loadPuzzle() {
+            const url = document.getElementById('puzzleUrl').value;
+            const embed = document.getElementById('puzzleEmbed');
+            
+            if (url) {
+                embed.innerHTML = '<iframe class="embed-iframe" src="' + url + '" title="Interactive Puzzle"></iframe>';
+            } else {
+                alert('Please enter a valid URL for the puzzle.');
+            }
+        }
+        
+        function openPuzzleTab() {
+            const url = document.getElementById('puzzleUrl').value;
+            if (url) {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            } else {
+                alert('Please enter a puzzle URL first.');
+            }
+        }
+        
+        function rollOvenElemental() {
+            const roll = Math.floor(Math.random() * 4) + 1;
+            const results = [
+                "1d3 Magmins (HP: 9, AC: 14, Death Burst)",
+                "1d4 Smoke Mephits (HP: 22, AC: 12, Blinding Breath)",
+                "1d4 Magma Mephits (HP: 22, AC: 11, Fire Breath)",
+                "1 Fire Snake (HP: 22, AC: 14, Multiattack)"
+            ];
+            
+            document.getElementById('ovenResult').innerHTML = ` → <strong>Roll ${roll}:</strong> ${results[roll - 1]}`;
+        }
+
+        function searchContent() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const resultsDiv = document.getElementById('searchResults');
+            
+            if (query.length < 2) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            const searchData = [
+                // Locations
+                { title: "🚪 Entrance", content: "Mac the Treant, front doors, owl wind chime", tab: "locations", section: "entrance-orchard" },
+                { title: "🍎 Apple Orchard", content: "Dryads, apple trees, recipe clues", tab: "locations", section: "entrance-orchard" },
+                { title: "🗑️ Waste Pile", content: "Violet Fungus, treasure, rotting fruit", tab: "locations", section: "entrance-orchard" },
+                { title: "🏪 Shop", content: "cashbox, owl spectacles, treasure", tab: "locations", section: "main-building" },
+                { title: "📋 Office", content: "first half recipe, safe, trapped drawer", tab: "locations", section: "main-building" },
+                { title: "🛡️ Guard Room", content: "apartment key, shillelagh oil, chest", tab: "locations", section: "main-building" },
+                { title: "🚛 Loading Dock", content: "goblin patrol, hidden compartment", tab: "locations", section: "main-building" },
+                { title: "👨‍🍳 Bakery Floor", content: "goblin bakers, oven elementals, spices", tab: "locations", section: "main-building" },
+                { title: "🧩 Puzzle Lock", content: "ingredient puzzle, riddle, apartment access", tab: "locations", section: "apartment-finale" },
+                { title: "🏠 Grammy's Apartment", content: "Ruckwort, second half recipe, black seeds", tab: "locations", section: "apartment-finale" },
+                
+                // Creatures
+                { title: "🌳 Mac the Treant", content: "entrance guardian, speaks with plants", tab: "creatures" },
+                { title: "🧚 Dryads", content: "orchard fey, recipe information, charm", tab: "creatures" },
+                { title: "🍄 Violet Fungus", content: "waste pile monster, rotting touch", tab: "creatures" },
+                { title: "👹 Goblins", content: "bakery inhabitants, pie obsessed", tab: "creatures" },
+                { title: "👹 Ruckwort", content: "pie boss, apartment final encounter", tab: "creatures" },
+                { title: "🔥 Oven Elementals", content: "fire creatures, magmins, mephits, fire snake", tab: "creatures" },
+                
+                // Treasure
+                { title: "💰 Shop Treasure", content: "owl spectacles, gold coins", tab: "treasure" },
+                { title: "💰 Office Treasure", content: "recipe half, signet ring, safe", tab: "treasure" },
+                { title: "💰 Apartment Treasure", content: "recipe half, black seeds, topaz", tab: "treasure" },
+                { title: "🎁 Final Reward", content: "bag of tricks, pie day fund", tab: "treasure" },
+                
+                // Tools
+                { title: "🎲 Goblin Patrol", content: "random encounter table", tab: "tools" },
+                { title: "🎲 Oven Contents", content: "elemental encounter table", tab: "tools" },
+                { title: "🎲 Potion Cabinet", content: "random potion rewards", tab: "tools" }
+            ];
+
+            const results = searchData.filter(item => 
+                item.title.toLowerCase().includes(query) || 
+                item.content.toLowerCase().includes(query)
+            );
+
+            if (results.length === 0) {
+                resultsDiv.innerHTML = '<div class="search-result-item"><div class="search-result-title">No results found</div></div>';
+            } else {
+                resultsDiv.innerHTML = results.map(result => 
+                    `<div class="search-result-item" onclick="goToSearchResult('${result.tab}', '${result.section || ''}')">
+                        <div class="search-result-title">${result.title}</div>
+                        <div class="search-result-context">${result.content}</div>
+                    </div>`
+                ).join('');
+            }
+            
+            resultsDiv.style.display = 'block';
+        }
+
+        function goToSearchResult(tab, section) {
+            // Hide search results
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('searchInput').value = '';
+            
+            // Navigate to tab
+            showTab(tab);
+            
+            // If it's a location with a section, show that section too
+            if (section && tab === 'locations') {
+                setTimeout(() => showLocationTab(section), 100);
+            }
+        }
+
+        function goToReference(tab, elementId) {
+            // Navigate to the specified tab
+            showTab(tab);
+            
+            // If there's a specific element to scroll to, do it after a brief delay
+            if (elementId) {
+                setTimeout(() => {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // Highlight the element briefly
+                        element.style.backgroundColor = '#FFE4B5';
+                        setTimeout(() => {
+                            element.style.backgroundColor = '';
+                        }, 2000);
+                    }
+                }, 200);
+            }
+        }
+
+        // Hide search results when clicking outside
+        document.addEventListener('click', function(event) {
+            const searchContainer = document.querySelector('.search-container');
+            if (!searchContainer.contains(event.target)) {
+                document.getElementById('searchResults').style.display = 'none';
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98ae92cb712eb037',t:'MTc1OTg1MjQyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
 
