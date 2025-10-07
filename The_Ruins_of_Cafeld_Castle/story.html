@@ -1,1 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Ruins of Cafeld Castle — Adventure Webpage</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="A Level 1 D&D adventure: The Ruins of Cafeld Castle. Synopsis, acts, encounters, NPC stat blocks, puzzles, and future hooks."/>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    @media print {
+      /* Print-friendly: expand content, hide chrome */
+      #sidebar, #topbar, .no-print { display: none !important; }
+      main { width: 100% !important; margin: 0 !important; }
+      a[href]::after { content: ""; }
+    }
+    /* Smooth anchor scrolling */
+    html { scroll-behavior: smooth; }
+    /* Simple accordion transitions */
+    .accordion-content { 
+      max-height: 0; 
+      overflow: hidden; 
+      transition: max-height 0.3s ease;
+      opacity: 0;
+    }
+    .accordion.open .accordion-content { 
+      max-height: 2000px; 
+      opacity: 1;
+    }
+    .flavor{border-left:3px solid rgb(16 185 129 / 0.6); padding-left:0.75rem; margin-top:0.5rem; color:#e5e7eb; opacity:0.95}
+    .flavor em{color:#a7f3d0}
+    /* Colorful stat styling */
+    .stat-ac { color: #60a5fa; font-weight: 600; }
+    .stat-hp { color: #f87171; font-weight: 600; }
+    .stat-speed { color: #34d399; font-weight: 600; }
+    .stat-ability { color: #fbbf24; font-weight: 600; }
+    .stat-saves { color: #a78bfa; font-weight: 600; }
+    .stat-skills { color: #fb7185; font-weight: 600; }
+    .stat-resistance { color: #f97316; font-weight: 600; }
+    .stat-immunity { color: #ef4444; font-weight: 600; }
+    .stat-language { color: #06b6d4; font-weight: 600; }
+    .stat-senses { color: #10b981; font-weight: 600; }
+    .stat-actions { color: #8b5cf6; font-weight: 600; }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100">
+  <!-- Top Bar -->
+  <header id="topbar" class="sticky top-0 z-40 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+      <div class="flex items-center gap-3">
+        <button id="sidebarToggle" class="rounded-xl border border-zinc-800 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-900 lg:hidden" aria-label="Toggle menu">Menu</button>
+        <h1 class="text-lg font-semibold tracking-tight">The Ruins of Cafeld Castle</h1>
+        <span class="hidden rounded-full bg-emerald-700/20 px-2 py-0.5 text-xs text-emerald-300 lg:inline">Level 1 Adventure</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <input id="search" type="search" placeholder="Search content…" class="w-48 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 sm:w-64" />
+        <button onclick="window.print()" class="no-print rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-800">Print</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-6 lg:grid-cols-[280px,1fr] lg:gap-8">
+    <!-- Sidebar / TOC -->
+    <aside id="sidebar" class="fixed top-20 left-4 bottom-4 z-50 w-72 transform -translate-x-full transition-transform duration-300 ease-in-out bg-zinc-900 border border-zinc-800 rounded-2xl p-4 overflow-y-auto lg:relative lg:translate-x-0 lg:inset-auto lg:top-0 lg:w-auto lg:bg-zinc-900/50 lg:sticky lg:top-20 lg:h-max">
+      <nav class="text-sm leading-6">
+        <p class="mb-2 text-xs uppercase tracking-wide text-zinc-400">Contents</p>
+        <ol class="space-y-1">
+          <li><a class="toc-link hover:text-emerald-400" href="#synopsis">Synopsis</a></li>
+          <li><a class="toc-link hover:text-emerald-400" href="#act1">Act 1: The Offer</a></li>
+          <li><a class="toc-link hover:text-emerald-400" href="#act2">Act 2: Journey to Cafeld</a></li>
+          <li><a class="toc-link hover:text-emerald-400" href="#act3">Act 3: The Ruins</a></li>
+          <li class="ml-4"><a class="toc-link hover:text-emerald-400" href="#hall-of-echoes">— Hall of Echoes</a></li>
+          <li class="ml-4"><a class="toc-link hover:text-emerald-400" href="#bandit-camp">— Bandit Camp</a></li>
+          <li class="ml-4"><a class="toc-link hover:text-emerald-400" href="#heart-of-cafeld">— Heart of Cafeld</a></li>
+          <li><a class="toc-link hover:text-emerald-400" href="#tests">The Tests & Riddles</a></li>
+          <li><a class="toc-link hover:text-emerald-400" href="#act4">Act 4: Aftermath</a></li>
+          <li><a class="toc-link hover:text-emerald-400" href="#hooks">Twists & Hooks</a></li>
+          <li><a class="toc-link hover:text-emerald-400" href="#npcs">NPC Stat Blocks</a></li>
+        </ol>
+      </nav>
+    </aside>
+
+    <!-- Mobile backdrop -->
+    <div id="sidebarBackdrop" class="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 lg:hidden"></div>
+
+    <!-- Main Content -->
+    <main id="content" class="space-y-6">
+
+      <!-- Hero Card -->
+      <section class="rounded-2xl border border-zinc-800 bg-gradient-to-b from-zinc-900/60 to-zinc-900 p-6">
+        <p class="text-sm text-zinc-400">Quick Campaign</p>
+        <h2 class="mt-1 text-2xl font-bold">The Ruins of Cafeld Castle</h2>
+        <p class="mt-2 text-zinc-300">A forgotten ruin deep in the misty woods. Exploration, mystery, combat, and puzzles, with flexible approaches for level 1 adventurers.</p>
+        <div class="mt-4 flex flex-wrap gap-2 text-xs">
+          <span class="rounded-full bg-emerald-700/20 px-2.5 py-1 text-emerald-300">Level 1</span>
+          <span class="rounded-full bg-indigo-700/20 px-2.5 py-1 text-indigo-300">Exploration</span>
+          <span class="rounded-full bg-rose-700/20 px-2.5 py-1 text-rose-300">Puzzles</span>
+          <span class="rounded-full bg-amber-700/20 px-2.5 py-1 text-amber-300">Mystery</span>
+        </div>
+      </section>
+
+      <!-- Synopsis -->
+      <section id="synopsis" class="prose prose-invert max-w-none prose-headings:scroll-mt-24">
+        <h3>Synopsis</h3>
+        <p>An elven scholar named <strong>Derga</strong> hires the party to explore long-lost Cafeld Castle, an overgrown ruin rumored to be haunted by strange lights and eerie voices. Within lie powerful artifacts and lost knowledge—if the adventurers can survive. Will they uncover the secrets of Cafeld, or become its next victims?</p>
+      </section>
+
+      <!-- Act 1 -->
+      <section id="act1" class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+        <h3 class="text-xl font-semibold">Act 1: The Offer</h3>
+        <div class="mt-3 space-y-4">
+          <div>
+            <h4 class="font-medium">Meeting at the Green Owl Tavern</h4>
+            <ul class="mt-2 list-disc pl-5 text-zinc-300">
+              <li>Cafeld Castle was abandoned centuries ago after its last ruler vanished under mysterious circumstances.</li>
+              <li>Legends say the ruins are haunted, but Derga believes they hide something of great historical value.</li>
+              <li>She needs help with dangers inside—wild creatures, bandits, or worse.</li>
+            </ul>
+            <p class="mt-2 text-emerald-300"><span class="font-semibold">Reward:</span> 50 gp each and keep any valuables found (except key historical relics).</p>
+            <p class="text-zinc-400">DC 12 Insight reveals Derga is excited but nervous—she may know more than she's saying.</p>
+          </div>
+
+          <details class="group rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
+            <summary class="cursor-pointer select-none font-medium text-zinc-200 group-open:text-emerald-300">Derga, Elven Scholar (Non‑Combatant Ally)</summary>
+            <div class="mt-3 grid gap-3 sm:grid-cols-2">
+              <p><span class="text-zinc-400">Medium Elf, NG.</span> Slender, silver‑haired, emerald eyes; deep green robes with golden runes; satchel of books; silver circlet; quiet confidence.</p>
+              <ul class="list-disc pl-5 text-zinc-300">
+                <li><span class="stat-ac">AC</span> 12 (robes), <span class="stat-hp">HP</span> 9 (2d8), <span class="stat-speed">Speed</span> 30 ft.</li>
+                <li><span class="stat-ability">Abilities</span> STR 10, DEX 12, CON 10, INT 16, WIS 14, CHA 12</li>
+                <li><span class="stat-saves">Saves</span> INT +5, WIS +4; <span class="stat-skills">Skills</span> Arcana +5, History +5, Insight +4</li>
+                <li><span class="stat-senses">Senses</span> Darkvision 60 ft.; <span class="stat-language">Languages</span> Common, Elvish, Draconic</li>
+              </ul><div class="sm:col-span-2">
+                <p><strong>Scholarly Guidance.</strong> Once per short rest, grant +1d4 to an INT or WIS check while researching or solving a puzzle.</p>
+                <p class="text-zinc-400"><strong>Tactics:</strong> Avoids combat; offers lore and puzzle hints.</p>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- Act 2 -->
+      <section id="act2" class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+        <h3 class="text-xl font-semibold">Act 2: The Journey to Cafeld</h3>
+        <p class="mt-2 text-zinc-300">A half‑day through tangled forest paths.</p>
+        <ul class="mt-3 grid gap-3 sm:grid-cols-2">
+          <li class="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4"><strong>Collapsed Bridge.</strong> Athletics DC 10 to climb down/up or solve creatively.<div class="flavor">Stone teeth of a once-proud span jut from the chasm like broken fangs. <em>Mist swirls</em> below; damp moss slicks the remaining stones. A <em>rope frayed to white threads</em> dangles on the far side, swaying to a rhythm you can't feel.</div></li>
+          <li class="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4"><strong>Signs of Others.</strong> Bandit tracks suggest rivals are ahead. <span class="text-zinc-400">(Do the DC check here.)</span><div class="flavor">Boot-prints trample damp leaf litter; <em>charred birch twigs</em> mark where someone doused a fire in haste. A <em>blue-dyed scrap</em> of cloth (Sarka's sash color) snags on a thorn, fluttering like a warning pennant.</div></li>
+          <li class="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4"><strong>Restless Spirit.</strong> Pale figure watches from trees, vanishes when approached.<div class="flavor">Between the boles of ancient oaks, <em>moon-pale eyes</em> hover in the gloom. The air grows ten degrees colder; <em>breath pearls</em> in front of lips even at midday. Footfalls crunch where no one stands.</div></li>
+          <li class="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4 sm:col-span-2"><strong>Shortcut.</strong> Survival or Perception DC 13 spots a secret trail and saves time<div class="flavor">A <em>narrow seam in the undergrowth</em>—vines stitched over bent hazel wands—hides the hunter's path. Pressing aside the <em>dew-beaded ivy</em> releases the scents of <em>crushed fern and wet loam</em>. Faint <em>chalk sigils of an owl</em> mark stones at ankle height every twenty paces, pointing the way.</div></li>
+        </ul>
+      </section>
+
+      <!-- Act 3 -->
+      <section id="act3" class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+        <h3 class="text-xl font-semibold">Act 3: The Ruins of Cafeld Castle</h3>
+        <p class="mt-2">A crumbling fortress, entrance choked by fallen stones and creeping vines. Above a worn archway, faded Elvish reads: <em>"Only those who seek wisdom shall pass unharmed."</em></p>
+        <div class="flavor">Black ivy grips the outer walls like <em>ink-stained fingers</em>. In the courtyard, a <em>dry fountain</em> holds rainwater the color of tarnished silver; pale lilies float where coins once glimmered. Crows watch from a shattered belfry, their silhouettes like <em>ink blots</em> against a wan sky.</div>
+        <p class="text-zinc-400">Investigation or History DC 12: home to a secretive elven order researching powerful magic before they disappeared.</p>
+
+        <!-- Hall of Echoes -->
+        <div id="hall-of-echoes" class="mt-4 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
+          <h4 class="font-medium">Hall of Echoes</h4>
+          <div class="mt-2">
+            <div class="flavor">Mirrors—tall as sentries—wear <em>veils of dust</em>, yet each reflection gleams too sharply, lagging a half‑breath behind your movements. A dropped whisper returns as <em>someone else's voice</em> from the far end of the hall.</div>
+            <p class="mt-2"><strong>Puzzle Clue:</strong> The phrase <em>"Light reveals the past, shadow conceals the truth."</em> is etched faintly above the entrance. Speaking it deactivates the mirrors and reveals a hidden passage.</p>
+            <p class="mt-2 text-rose-300"><strong>Failure:</strong> Shadowy figures emerge to attack (2 Shadows, adjusted for level 1).</p>
+          </div>
+        </div>
+
+        <!-- Bandit Camp -->
+        <div id="bandit-camp" class="mt-4 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
+          <h4 class="font-medium">Bandit Camp</h4>
+          <div class="mt-2">
+            <div class="flavor">A ring of <em>soot-black stones</em> hems a dead fire. Bedrolls reek of <em>iron and wet leather</em>. Dice—one corner blood‑specked—sit mid‑game. From saplings overhead dangle <em>tin charms</em> that clink in the breeze like quiet alarms.</div>
+          </div>
+        </div>
+
+        <!-- Heart of Cafeld -->
+        <div id="heart-of-cafeld" class="mt-4 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
+          <h4 class="font-medium">Heart of Cafeld</h4>
+          <div class="mt-2">
+            <div class="flavor">The pedestal rises from a <em>mosaic of owls</em> in flight—wings outstretched toward the cardinal points. The orb's light pulses with a <em>heartbeat cadence</em>, casting long ribs of radiance across carved bookshelves drowned in shadow.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tests & Riddles -->
+      <section id="tests" class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+        <h3 class="text-xl font-semibold">The Tests</h3>
+        <div class="mt-3 grid gap-4 md:grid-cols-3">
+          <div class="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
+            <h4 class="font-medium">Test of Knowledge</h4>
+            <p class="mt-2 text-zinc-300">Riddle: "I have no mouth, yet I tell the truth. I move without legs, yet I guide the way. I am not alive, yet I grow and change. What am I?"</p>
+            <p class="mt-2 text-emerald-300">Answer: A book (or written word / knowledge / history).</p>
+          </div>
+          <div class="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
+            <h4 class="font-medium">Test of Courage</h4>
+            <p class="mt-2 text-zinc-300">Minor combat against a magical guardian.</p>
+          </div>
+          <div class="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
+            <h4 class="font-medium">Test of Wisdom</h4>
+            <p class="mt-2 text-zinc-300">Three statues: eyes covered, ears covered, mouth covered.</p>
+            <p class="text-zinc-300">Riddle: "One speaks only lies. One sees truth with blind eyes. One listens yet knows nothing. Which holds true wisdom?"</p>
+            <p class="mt-2 text-emerald-300">Answer: The one covering their mouth — silence, patience, reflection.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Act 4 -->
+      <section id="act4" class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+        <h3 class="text-xl font-semibold">Act 4: The Aftermath</h3>
+        <ul class="mt-2 list-disc pl-5 text-zinc-300">
+          <li>Returning to Hearthmere, Derga studies the orb and pays the party.</li>
+          <li>Hints of deeper secrets and future expeditions into Cafeld.</li>
+          <li>If the party keeps the orb, Derga warns they may have unleashed a terrible power.</li>
+        </ul>
+      </section>
+
+      <!-- Hooks -->
+      <section id="hooks" class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+        <h3 class="text-xl font-semibold">Potential Twists & Future Hooks</h3>
+        <ul class="mt-2 list-disc pl-5 text-zinc-300">
+          <li>The orb imprisons an ancient entity.</li>
+          <li>A larger faction seeks the ruin's power.</li>
+          <li>Derga belongs to a secretive elven order researching lost magic.</li>
+        </ul>
+      </section>
+
+      <!-- NPCs -->
+      <section id="npcs" class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6">
+        <h3 class="text-xl font-semibold">NPC Stat Blocks</h3>
+        <!-- Derga -->
+        <div class="accordion mt-3 rounded-xl border border-zinc-800">
+          <button class="flex w-full items-center justify-between gap-4 bg-zinc-950/50 px-4 py-3 text-left font-medium">
+            <span>Derga, Elven Scholar (Non‑Combatant Ally)</span>
+            <svg class="pointer-events-none h-5 w-5 opacity-70" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z"/></svg>
+          </button>
+          <div class="accordion-content px-4 pb-4 pt-2 text-zinc-300">
+            <div class="grid gap-3 md:grid-cols-2">
+              <p><span class="text-zinc-400">Medium Elf, NG.</span> Slender, silver‑haired, emerald eyes; deep green robes with golden runes; satchel of books; silver circlet; hushed demeanor.</p>
+              <ul class="list-disc pl-5">
+                <li><span class="stat-ac">AC</span> 12, <span class="stat-hp">HP</span> 9 (2d8), <span class="stat-speed">Speed</span> 30 ft.</li>
+                <li><span class="stat-ability">STR</span> 10, <span class="stat-ability">DEX</span> 12, <span class="stat-ability">CON</span> 10, <span class="stat-ability">INT</span> 16, <span class="stat-ability">WIS</span> 14, <span class="stat-ability">CHA</span> 12</li>
+                <li><span class="stat-saves">Saves</span> INT +5, WIS +4; <span class="stat-skills">Skills</span> Arcana +5, History +5, Insight +4</li>
+                <li><span class="stat-senses">Senses</span> Darkvision 60 ft.; <span class="stat-language">Languages</span> Common, Elvish, Draconic</li>
+              </ul>
+              <div class="md:col-span-2">
+                <p><strong>Scholarly Guidance.</strong> Once per short rest, +1d4 to an ally's INT or WIS check for research/puzzles.</p>
+                <p class="text-zinc-400"><strong>Tactics:</strong> Avoids combat; provides lore and hints.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bandits -->
+        <div class="accordion mt-4 rounded-xl border border-zinc-800">
+          <button class="flex w-full items-center justify-between gap-4 bg-zinc-950/50 px-4 py-3 text-left font-medium">
+            <span>Bandits of Cafeld Castle (Minions)</span>
+            <svg class="pointer-events-none h-5 w-5 opacity-70" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z"/></svg>
+          </button>
+          <div class="accordion-content px-4 pb-4 pt-2 text-zinc-300">
+            <p class="text-zinc-300">Rough scoundrels in mismatched armor; chipped weapons; greedy eyes.</p>
+            <ul class="mt-2 grid gap-3 md:grid-cols-2">
+              <li class="rounded-lg border border-zinc-800 bg-zinc-950/40 p-3"><span class="stat-ac">AC</span> 12, <span class="stat-hp">HP</span> 11 (2d8+2), <span class="stat-speed">Speed</span> 30 ft.</li>
+              <li class="rounded-lg border border-zinc-800 bg-zinc-950/40 p-3"><span class="stat-ability">DEX</span> +2, <span class="stat-skills">Skills</span> Stealth +4, Deception +2</li>
+              <li class="rounded-lg border border-zinc-800 bg-zinc-950/40 p-3"><span class="stat-saves">Saves</span> DEX +4, WIS +2</li>
+              <li class="rounded-lg border border-zinc-800 bg-zinc-950/40 p-3"><span class="stat-actions">Actions</span> Scimitar +4 (1d6+2), Shortbow +4 (1d6+2)</li>
+            </ul>
+            <p class="mt-2 text-zinc-400"><strong>Tactics:</strong> Fight until half fall, then flee or surrender.</p>
+          </div>
+        </div>
+
+        <!-- Sarka -->
+        <div class="accordion mt-4 rounded-xl border border-zinc-800">
+          <button class="flex w-full items-center justify-between gap-4 bg-zinc-950/50 px-4 py-3 text-left font-medium">
+            <span>Sarka the Greedy (Bandit Leader)</span>
+            <svg class="pointer-events-none h-5 w-5 opacity-70" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z"/></svg>
+          </button>
+          <div class="accordion-content px-4 pb-4 pt-2 text-zinc-300">
+            <div class="grid gap-3 md:grid-cols-2">
+              <p>Wiry woman with short dark‑red hair and a cheek scar; patchwork armor; well‑kept rapier; blue sash.</p>
+              <ul class="list-disc pl-5">
+                <li><span class="stat-ac">AC</span> 13 (studded), <span class="stat-hp">HP</span> 18 (3d8+3), <span class="stat-speed">Speed</span> 30 ft.</li>
+                <li><span class="stat-ability">STR</span> 12, <span class="stat-ability">DEX</span> 15, <span class="stat-ability">CON</span> 12, <span class="stat-ability">INT</span> 11, <span class="stat-ability">WIS</span> 10, <span class="stat-ability">CHA</span> 14</li>
+                <li><span class="stat-saves">Saves</span> DEX +4, CHA +4; <span class="stat-skills">Skills</span> Persuasion +4, Intimidation +4, Sleight of Hand +4</li>
+                <li><span class="stat-language">Languages</span> Common, Thieves' Cant</li>
+              </ul>
+              <div class="md:col-span-2">
+                <p><span class="stat-actions">Actions:</span> Scimitar +4 (1d6+3), Dagger +4 (1d4+3, 20/60).</p>
+                <p><strong>Cunning Leader (Recharge 5–6):</strong> Bonus Action—one ally within 30 ft. makes an immediate attack.</p>
+                <p class="text-zinc-400"><strong>Tactics:</strong> Flees/bribes at 1/2 HP; fights dirty using cover if cornered.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ghostly Guardian -->
+        <div class="accordion mt-4 rounded-xl border border-zinc-800">
+          <button class="flex w-full items-center justify-between gap-4 bg-zinc-950/50 px-4 py-3 text-left font-medium">
+            <span>The Ghostly Guardian (Final Challenge)</span>
+            <svg class="pointer-events-none h-5 w-5 opacity-70" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z"/></svg>
+          </button>
+          <div class="accordion-content px-4 pb-4 pt-2 text-zinc-300">
+            <div class="grid gap-3 md:grid-cols-2">
+              <p>Translucent figure in tattered elven armor; hollow‑eyed; voice an echoing whisper.</p>
+              <ul class="list-disc pl-5">
+                <li><span class="stat-ac">AC</span> 13 (ethereal), <span class="stat-hp">HP</span> 16 (3d8+3), <span class="stat-speed">Speed</span> 0 ft., Fly 30 ft. (hover)</li>
+                <li><span class="stat-ability">DEX</span> 16, <span class="stat-ability">CON</span> 12, <span class="stat-ability">INT</span> 14, <span class="stat-ability">WIS</span> 14, <span class="stat-ability">CHA</span> 15</li>
+                <li><span class="stat-saves">Saves</span> WIS +4, CHA +4; <span class="stat-skills">Skills</span> Arcana +4, Perception +4</li>
+                <li><span class="stat-resistance">Resistances</span> Necrotic; nonmagical piercing/slashing. <span class="stat-immunity">Immunities</span> Charmed, Exhaustion, Frightened, Poisoned</li>
+              </ul>
+              <div class="md:col-span-2">
+                <p><span class="stat-actions">Actions:</span> Ethereal Strike +4 (1d8+2 necrotic); <em>Chilling Whisper</em> (Recharge 5–6): one creature within 30 ft. DC 12 WIS save or Frightened 1 min.</p>
+                <p class="text-zinc-400"><strong>Tactics:</strong> Prefers intimidation and tests over combat; disperses at ≤5 HP rather than being destroyed.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer Note -->
+      <footer class="border-t border-zinc-800 pt-6 text-sm text-zinc-400">
+        <p>This page is a playable presentation of "The Ruins of Cafeld Castle." Use the sidebar for quick navigation, search to filter content, and the Print button for a table‑ready copy.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar toggle (mobile)
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('sidebarToggle');
+    const backdrop = document.getElementById('sidebarBackdrop');
+    
+    function openSidebar() {
+      sidebar.classList.remove('-translate-x-full');
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+    }
+    
+    function closeSidebar() {
+      sidebar.classList.add('-translate-x-full');
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
+    }
+    
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        if (sidebar.classList.contains('-translate-x-full')) {
+          openSidebar();
+        } else {
+          closeSidebar();
+        }
+      });
+    }
+    
+    if (backdrop) {
+      backdrop.addEventListener('click', closeSidebar);
+    }
+
+    // Accordions
+    document.querySelectorAll('.accordion > button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const parent = btn.parentElement;
+        parent.classList.toggle('open');
+      });
+    });
+
+    // Search filter: hides cards/sections whose text doesn't match
+    const search = document.getElementById('search');
+    const content = document.getElementById('content');
+    function normalize(s){ return s.toLowerCase().replace(/\s+/g, ' ').trim(); }
+    if (search) {
+      search.addEventListener('input', () => {
+        const q = normalize(search.value);
+        const blocks = content.querySelectorAll('section, .accordion, details');
+        blocks.forEach(el => {
+          if (!q) { el.classList.remove('hidden'); return; }
+          const text = normalize(el.innerText || '');
+          if (text.includes(q)) el.classList.remove('hidden'); else el.classList.add('hidden');
+        });
+      });
+    }
+
+    // Highlight current section in TOC on scroll
+    const links = Array.from(document.querySelectorAll('.toc-link'));
+    const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const id = '#' + entry.target.id;
+        const link = links.find(a => a.getAttribute('href') === id);
+        if (link) {
+          if (entry.isIntersecting) {
+            links.forEach(l => l.classList.remove('text-emerald-400'));
+            link.classList.add('text-emerald-400');
+          }
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
+    sections.forEach(sec => observer.observe(sec));
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98aed46f50a31d68',t:'MTc1OTg1NTExNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
 
