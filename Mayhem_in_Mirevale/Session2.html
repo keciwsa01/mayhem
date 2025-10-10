@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mayhem in Mirevale - Session 2</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0d2e 25%, #16213e 50%, #0f3460 75%, #0a0a0a 100%);
+            color: #e0e6ff;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background effects */
+        .bg-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .neon-pulse {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.3) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .neon-pulse:nth-child(1) {
+            top: 10%;
+            left: 80%;
+            animation-delay: 0s;
+        }
+
+        .neon-pulse:nth-child(2) {
+            top: 60%;
+            left: 10%;
+            background: radial-gradient(circle, rgba(0, 255, 127, 0.2) 0%, transparent 70%);
+            animation-delay: 2s;
+        }
+
+        .neon-pulse:nth-child(3) {
+            top: 30%;
+            left: 50%;
+            background: radial-gradient(circle, rgba(0, 191, 255, 0.25) 0%, transparent 70%);
+            animation-delay: 1s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.5); opacity: 0.1; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ffff, #8a2be2, #00ff7f, #00bfff);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: neonGlow 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes neonGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .session-info {
+            font-size: 1.8rem;
+            color: #ff69b4;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+        }
+
+        .overview-section {
+            background: rgba(26, 13, 46, 0.9);
+            border: 2px solid #8a2be2;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .overview-section::before {
+            content: '📝';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #8a2be2;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .act-section {
+            background: rgba(16, 33, 62, 0.8);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .act-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 15px;
+            padding: 2px;
+            background: linear-gradient(45deg, #8a2be2, #00ffff, #00ff7f);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            -webkit-mask-composite: xor;
+        }
+
+        .act-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+        }
+
+        .act-title {
+            color: #00ffff;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .location {
+            background: rgba(0, 255, 127, 0.1);
+            border-left: 4px solid #00ff7f;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 10px 10px 0;
+            color: #00ff7f;
+            font-weight: bold;
+        }
+
+        .subsection {
+            margin: 1.5rem 0;
+        }
+
+        .subsection h4 {
+            color: #ff69b4;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+        }
+
+        .skill-challenge {
+            background: rgba(0, 191, 255, 0.1);
+            border: 1px solid #00bfff;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 10px;
+        }
+
+        .skill-challenge h5 {
+            color: #00bfff;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .dice-roll {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 0.25rem;
+            font-family: monospace;
+            color: #00ffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dice-roll:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+
+        .character-box {
+            background: rgba(138, 43, 226, 0.2);
+            border: 2px solid #8a2be2;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .character-name {
+            color: #ff69b4;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+        }
+
+        .crisis-event {
+            background: rgba(255, 69, 0, 0.2);
+            border: 2px solid #ff4500;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .crisis-event h5 {
+            color: #ff4500;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .breakdown-table {
+            background: rgba(16, 33, 62, 0.9);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 3rem;
+            overflow-x: auto;
+        }
+
+        .breakdown-table h3 {
+            color: #00ffff;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #e0e6ff;
+        }
+
+        th {
+            background: rgba(138, 43, 226, 0.3);
+            color: #00ffff;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid #8a2be2;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+        }
+
+        tr:hover {
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        ul, ol {
+            line-height: 1.6;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .session-tabs {
+            margin-bottom: 2rem;
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            width: auto;
+        }
+
+        .menu-toggle {
+            background: rgba(16, 33, 62, 0.95);
+            border: 2px solid #8a2be2;
+            color: #e0e6ff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .menu-toggle:hover {
+            background: rgba(138, 43, 226, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .tab-buttons {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 0.5rem;
+            flex-direction: column;
+            gap: 0.5rem;
+            background: rgba(16, 33, 62, 0.98);
+            padding: 1rem;
+            border-radius: 15px;
+            border: 2px solid #8a2be2;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            min-width: 250px;
+        }
+
+        .tab-buttons.show {
+            display: flex;
+        }
+
+        .tab-button {
+            background: rgba(16, 33, 62, 0.8);
+            border: 2px solid #8a2be2;
+            color: #e0e6ff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            background: rgba(138, 43, 226, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(45deg, #8a2be2, #00bfff);
+            color: white;
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .dm-quote {
+            background: rgba(255, 105, 180, 0.1);
+            border-left: 4px solid #ff69b4;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+            color: #ff69b4;
+            position: relative;
+        }
+
+        .dm-quote::before {
+            content: '💬';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            background: #ff69b4;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(138, 43, 226, 0.3);
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background: linear-gradient(45deg, #8a2be2, #00bfff);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .enemy-box {
+            background: rgba(255, 69, 0, 0.1);
+            border: 2px solid #ff4500;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .enemy-box h5 {
+            color: #ff4500;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .clue-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .clue-box h5 {
+            color: #ffd700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .breakdown-table {
+                font-size: 0.9rem;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1000;
+                width: auto;
+            }
+
+            .tab-button {
+                width: 100%;
+                text-align: center;
+                padding: 1rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-effects">
+        <div class="neon-pulse"></div>
+        <div class="neon-pulse"></div>
+        <div class="neon-pulse"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="title">MAYHEM</h1>
+            <div class="subtitle">IN MIREVALE</div>
+            <div style="font-size: 1.2rem; color: #00bfff; text-shadow: 0 0 8px rgba(0, 191, 255, 0.4); margin-bottom: 1rem;">A Neon-Lit D&D Adventure</div>
+            <div class="session-info">SESSION 2: The Beat of Rebellion</div>
+        </header>
+
+        <div class="session-tabs">
+            <div class="nav-menu">
+                <button class="menu-toggle" onclick="toggleMenu()">
+                    <span>☰</span>
+                    <span>Menu</span>
+                </button>
+                <div class="tab-buttons" id="tabButtons">
+                    <button class="tab-button active" onclick="showTab('act1')">Act 1: Escape & Discovery</button>
+                    <button class="tab-button" onclick="showTab('act2')">Act 2: The Historian's Shop</button>
+                    <button class="tab-button" onclick="showTab('act3')">Act 3: The Forgotten Music Hall</button>
+
+                    <button class="tab-button" onclick="showTab('act4')">Act 4: The Screaming Violin</button>
+                    <button class="tab-button" onclick="showTab('act5')">Act 5: The New Hideout</button>
+                    <button class="tab-button" onclick="showTab('optional')">Optional Side Encounter</button>
+                </div>
+            </div>
+
+            <div id="act1" class="tab-content active">
+                <div class="act-section">
+                    <h2 class="act-title">ACT 1: Escape & Discovery</h2>
+                    <div class="location">Location: The streets of Mirevale or a holding cell (depending on how Session 1 ended).</div>
+                    
+                    <div class="subsection">
+                        <h4>🔹 If the Party Was Captured</h4>
+                        <p>The party is locked in a small, underground holding cell, guarded by two Mayhem Henchmen.</p>
+                        <p>The guards are distracted—one is talking about Dame's upcoming full performance, while the other hums one of her songs.</p>
+                        
+                        <div class="dm-quote">
+                            <h5>💬 Guard Dialogue:</h5>
+                            <ul>
+                                <li>"Did you hear Dame's rehearsal last night? The whole building was shaking!"</li>
+                                <li>"Boss says we gotta find those Orchestra freaks before the Final Encore."</li>
+                                <li>"You hear? She's gonna peel the sky back like a curtain."</li>
+                                <li>"These prisoners better not know anything about that old music hall."</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="skill-challenge">
+                            <h5>🛠️ Escape Options:</h5>
+                            <ul>
+                                <li><span class="dice-roll">Sleight of Hand (DC 12)</span>: Pick the lock.</li>
+                                <li><span class="dice-roll">Deception (DC 14)</span>: Convince the guards they were mistakenly arrested.</li>
+                                <li><span class="dice-roll">Stealth (DC 13)</span>: Sneak out if an opportunity arises.</li>
+                                <li><strong>Combat:</strong> If the party chooses to fight, the guards call for reinforcements if the battle drags on.</li>
+                            </ul>
+                        </div>
+
+                        <div class="clue-box">
+                            <h5>💡 Clue from the Guards:</h5>
+                            <p>If knocked out or looted, one guard carries a blood-soaked encrypted note.</p>
+                            <ul>
+                                <li><strong>Message #1 (partially readable):</strong> "The Orchestra of the Forgotten MUST DIE!!!"</li>
+                                <li><strong>Message #2 (obscured by blood):</strong> "Super secret hideout for evil stuff is located at…"</li>
+                                <li><strong>Message #3 (torn piece of paper):</strong> "Find the [Unreadable] Book at the Historian's Shop."</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>🔹 If the Party Escaped in Session 1</h4>
+                        <div class="location">Location: A hidden alley or abandoned building.</div>
+                        <ul>
+                            <li>Vex meets them at a safe house and helps decrypt the notes.</li>
+                            <li>The party still needs to find the historian to get the missing details.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="act2" class="tab-content">
+                <div class="act-section">
+                    <h2 class="act-title">ACT 2: The Historian's Shop</h2>
+                    <div class="location">Location: A small, cluttered antique bookshop in a quieter part of town.</div>
+                    
+                    <div class="subsection">
+                        <h4>🔹 Roleplay Challenge:</h4>
+                        <p>The Historian is nervous—Dame's enforcers have already threatened him.</p>
+                        <p>He only gives partial answers unless convinced.</p>
+                        
+                        <div class="dm-quote">
+                            <h5>💬 Historian Dialogue:</h5>
+                            <ul>
+                                <li>"The Orchestra? <em>nervous laugh</em> Never heard of them. Just old fairy tales, really..."</li>
+                                <li>"Look, I've got a family. Dame's people made it very clear what happens to loose tongues."</li>
+                                <li>"That music hall... it's been abandoned for years. Nothing there but dust and broken dreams."</li>
+                                <li>"Go there if you wish, just dont say I did not warn you that place is in a rough part of town"</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="skill-challenge">
+                            <h5>🛠️ Player Persuasion Options:</h5>
+                            <ul>
+                                <li><span class="dice-roll">Persuasion (DC 14)</span>: Get him to reveal the Orchestra's past location.</li>
+                                <li><span class="dice-roll">Intimidation (DC 12)</span>: Force him to talk (risks alerting Dame's spies).</li>
+                                <li><span class="dice-roll">Insight (DC 13)</span>: Detect that he knows more than he's letting on.</li>
+                                <li><strong>Bribery (Requires 5+ GP):</strong> He hands over an old map with a possible location.</li>
+                            </ul>
+                        </div>
+
+                        <div class="character-box">
+                            <div class="character-name">📌 What They Learn:</div>
+                            <ul>
+                                <li>The Orchestra of the Forgotten was active years ago.</li>
+                                <li>They once performed in secret underground venues.</li>
+                                <li>Their last known location was a music hall, now abandoned.</li>
+                            </ul>
+                        </div>
+
+                        <div class="dm-quote">
+                            "Once the party leaves, they notice a cloaked figure watching them. If they confront or follow them, they vanish into the crowd."
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="act3" class="tab-content">
+                <div class="act-section">
+                    <h2 class="act-title">ACT 3: The Forgotten Music Hall (Old Hideout)</h2>
+                    <div class="location">Location: A dust-covered, crumbling music hall in a forgotten part of Mirevale.</div>
+                    
+                    <div class="subsection">
+                        <h4>🔹 Scene Setup:</h4>
+                        <ul>
+                            <li>The hall is in ruins, but some items remain intact.</li>
+                            <li>Henchmen are already here, searching for clues.</li>
+                            <li>The party can sneak around or fight them.</li>
+                        </ul>
+
+                        <div class="enemy-box">
+                            <h5>💀 Enemies:</h5>
+                            <ul>
+                                <li>2 Mayhem Henchmen (Regular foes)</li>
+                                <li>1 Elite Mayhem Guard (Mini-boss)</li>
+                            </ul>
+                        </div>
+
+                        <div class="dm-quote">
+                            <h5>💬 Enemy Dialogue:</h5>
+                            <p><strong>Mayhem Henchmen:</strong></p>
+                            <ul>
+                                <li>"Dame says the Orchestra's got a new hideout somewhere. We find it, we end this."</li>
+                            </ul>
+                            <p><strong>Elite Mayhem Guard:</strong></p>
+                            <ul>
+                                <li>"So you're the troublemakers I've been hearing about. Dame's got special plans for you."</li>
+                                <li>"The old music is dead! Dame's rhythm is the only truth now!"</li>
+                            </ul>
+                        </div>
+
+                        <div class="skill-challenge">
+                            <h5>🔥 Player Choices:</h5>
+                            <ul>
+                                <li><span class="dice-roll">Stealth Approach (DC 13)</span>: Avoid a fight and eavesdrop.</li>
+                                <li><span class="dice-roll">Deception (DC 14)</span>: Pretend to be Dame's enforcers.</li>
+                                <li><strong>Combat:</strong> If they attack, reinforcements might arrive.</li>
+                            </ul>
+                        </div>
+
+                        <div class="clue-box">
+                            <h5>📜 Clues to Find (If Investigated):</h5>
+                            <ul>
+                                <li><strong>Sheet Music</strong> <span class="dice-roll">Arcana DC 12</span>: Reveals that this music was used to seal The Pulse.</li>
+                                <li><strong>Scraps of Notes</strong> <span class="dice-roll">Investigation DC 13</span>: Mentions The Screaming Violin nightclub.</li>
+                                <li><strong>A torn book page:</strong> "…beneath the city's heart, the beat is strongest. The Screaming Violin marks the way."</li>
+                            </ul>
+                            <p><strong>📌</strong> If the players steal without fighting, they only get Clue #3.</p>
+                            <p><strong>📌</strong> If they fight, they find all the clues and extra loot.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div id="act4" class="tab-content">
+                <div class="act-section">
+                    <h2 class="act-title">ACT 4: The Screaming Violin & Reality Distortions</h2>
+                    <div class="location">Location: The streets near The Screaming Violin nightclub.</div>
+                    
+                    <div class="subsection">
+                        <h4>🔹 Increasing Distortions</h4>
+                        <ul>
+                            <li>The closer they get, the more reality bends.</li>
+                            <li>Players see people flicker in and out of existence. Though the people dont really seem to notice.</li>
+                            <li>Random sound bursts distort their senses.</li>
+                        </ul>
+
+                        <div class="skill-challenge">
+                            <h5>🛠️ Skill Challenges:</h5>
+                            <ul>
+                                <li><span class="dice-roll">Perception (DC 14)</span>: See figures flickering in and out of time.</li>
+                                <li><span class="dice-roll">Arcana (DC 13)</span>: Recognize The Pulse's influence increasing.</li>
+                                <li><span class="dice-roll">Constitution Save (DC 12)</span>: Avoid getting dizzy from the reality shifts.</li>
+                            </ul>
+                        </div>
+
+                        <div class="dm-quote">
+                            <h5>💬 Distorted Citizens:</h5>
+                            <ul>
+                                <li>"The music... it's in my head... can't make it stop..."</li>
+                                <li>"The beat... the beat is everything... join the rhythm..." <em>eyes glowing</em></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="crisis-event">
+                        <h5>🔹 Encounter: Identified by Henny Banes!</h5>
+                        <div class="location">Location: Outside The Screaming Violin.</div>
+                        <p>Two Mayhem Henchmen recognize the party from Henny Banes' description.</p>
+                        <p>If they searched the hideout, they know a henchman escaped earlier.</p>
+                        
+                        <div class="dm-quote">
+                            <h5>💬 Mayhem Henchmen (recognizing party):</h5>
+                            <ul>
+                                <li>"There! Those are the ones Henny described!"</li>
+                                <li>"Dame's offering a big reward for these troublemakers!"</li>
+                                <li>"You picked the wrong night to come here. The Pulse is almost ready!"</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="skill-challenge">
+                            <h5>🔥 Combat or Escape Options:</h5>
+                            <ul>
+                                <li><strong>Fight them (Combat Encounter)</strong>
+                                    <ul><li>Enemies: 2 Mayhem Henchmen</li></ul>
+                                </li>
+                                <li><strong>Chase Sequence</strong> <span class="dice-roll">Dexterity Check DC 13</span>
+                                    <ul><li>Players must navigate alleys and rooftops to lose them.</li></ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="act5" class="tab-content">
+                <div class="act-section">
+                    <h2 class="act-title">ACT 5: The New Hideout – The Echoing Chamber</h2>
+                    <div class="location">Location: Beneath the Mirevale aqueduct, through a series of narrow tunnels lit with magical candles and protected by sound-based wards.</div>
+                    
+                    <div class="subsection">
+                        <h4>🗺️ Environment:</h4>
+                        <ul>
+                            <li>The entrance is concealed behind a rusted iron grate, covered in moss.</li>
+                            <li>Inside, the space opens into a circular underground rehearsal chamber, filled with old instruments, worn rugs, and magical sound-dampening stones along the walls.</li>
+                            <li>Soft harmonies seem to hum in the walls—a remnant of past performances.</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>🎻 The Orchestra Reunited</h4>
+                        <p>The players meet the surviving members of the Orchestra of the Forgotten:</p>
+                        
+                        <div class="character-box">
+                            <div class="character-name">🎭 Orchestra Members:</div>
+                            <ul>
+                                <li><strong>Lisette Aria:</strong> Skeptical of the party but recognizes the importance of their arrival.</li>
+                                <li><strong>Fizz Twigwhistle:</strong> Excited and suspicious in equal measure.</li>
+                                <li><strong>Korrin 'Boom' Rax:</strong> Stands silently behind a massive drum, watching carefully.</li>
+                            </ul>
+                        </div>
+
+                        <div class="character-box">
+                            <div class="character-name">📖 What They Reveal:</div>
+                            <ul>
+                                <li>The Pulse was once sealed away by their music beneath Mirevale.</li>
+                                <li>Dame Mayhem is awakening it through her warped rhythms and is preparing for her "Final Encore" at The Screaming Violin.</li>
+                                <li>The Screaming Violin was constructed above the Pulse's prison, specifically to tap into its power.</li>
+                            </ul>
+                        </div>
+
+                        <div class="dm-quote">
+                            <h5>💬 Orchestra Member Dialogue:</h5>
+                            <p><strong>Lisette Aria (Skeptical Leader):</strong></p>
+                            <ul>
+                                <li>"More strangers? How do we know Dame didn't send you?"</li>
+                                <li>"The old songs are dying with us. If we fail, the city falls to her rhythm forever."</li>
+                                <li>"You want to help? Prove it. The counter-melody requires perfect harmony - one wrong note or one wrong move and we're all dead."</li>
+                                <li>"We did not defeat The Pulse; we taught it how to sleep. We showed it mercy because we felt it could be used for something greater."</li>
+                            </ul>
+                            <p><strong>Fizz Twigwhistle (Excited Gnome):</strong></p>
+                            <ul>
+                                <li>"I've been working on modifications to the ancient songs - adding a little pizzazz, you know?"</li>
+                                <li>"Dame's music is like a virus, but our melodies are the cure!"</li>
+                            </ul>
+                            <p><strong>Korrin 'Boom' Rax (Stoic Drummer):</strong></p>
+                            <ul>
+                                <li><em>just nods and taps complex rhythms on his drum</em></li>
+                                <li>"The heartbeat of the city is changing. We must restore the natural rhythm."</li>
+                                <li>"I've felt The Pulse stirring. It grows stronger with each of Dame's performances."</li>
+                            </ul>
+                        </div>
+
+                        <div class="dm-quote">
+                            "💡 The Orchestra asks for help performing the ancient counter-melody that can weaken The Pulse again. They offer to help the party in Session 3 if the party agrees to help protect them and the ritual."
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="optional" class="tab-content">
+                <div class="act-section">
+                    <h2 class="act-title">Optional Side Encounter</h2>
+                    <div class="location">Location: On their way out of the hideout.</div>
+                    
+                    <div class="subsection">
+                        <h4>✨ Patrol Encounter</h4>
+                        <p>On their way out, the party is spotted by two patrolling henchmen (one may recognize them due to Henny Banes' report).</p>
+                        
+                        <div class="dm-quote">
+                            <h5>💬 Patrolling Henchmen:</h5>
+                            <ul>
+                                <li>"Command says to bring them back alive if possible. Dame wants to make an example."</li>
+                                <li>"They're heading toward the old aqueducts! Cut them off!"</li>
+                                <li>"Wait... do you hear that? Sounds like... music?"</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="skill-challenge">
+                            <h5>🔥 Resolution Options:</h5>
+                            <ul>
+                                <li><strong>Chase Sequence:</strong> Navigate through the city streets to lose pursuit.</li>
+                                <li><strong>Combat Encounter:</strong> Fight the two henchmen directly.</li>
+                                <li><strong>Interrogation Opportunity:</strong> Capture and question them for more details about Dame's preparations.</li>
+                            </ul>
+                        </div>
+
+                        <div class="dm-quote">
+                            "This encounter can provide additional intel about Dame Mayhem's plans or serve as a bridge to Session 3, depending on how the players handle it."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="breakdown-table">
+            <h3>⏳ SESSION 2 BREAKDOWN</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Activity</th>
+                        <th>Challenge Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Act 1</td>
+                        <td>Escape & Discovery</td>
+                        <td>Skill Challenges & Combat</td>
+                    </tr>
+                    <tr>
+                        <td>Act 2</td>
+                        <td>The Historian's Shop</td>
+                        <td>Social Encounter & Information Gathering</td>
+                    </tr>
+                    <tr>
+                        <td>Act 3</td>
+                        <td>The Forgotten Music Hall</td>
+                        <td>Combat/Stealth & Investigation</td>
+                    </tr>
+
+                    <tr>
+                        <td>Act 4</td>
+                        <td>The Screaming Violin</td>
+                        <td>Environmental Hazards & Combat</td>
+                    </tr>
+                    <tr>
+                        <td>Act 5</td>
+                        <td>The New Hideout</td>
+                        <td>Roleplay & Alliance Building</td>
+                    </tr>
+                    <tr>
+                        <td>Optional</td>
+                        <td>Side Encounter</td>
+                        <td>Combat/Chase/Interrogation</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive neon effects
+        document.addEventListener('mousemove', function(e) {
+            const cards = document.querySelectorAll('.act-section');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                    card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(138, 43, 226, 0.3) 0%, rgba(16, 33, 62, 0.8) 50%)`;
+                } else {
+                    card.style.background = 'rgba(16, 33, 62, 0.8)';
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        function toggleMenu() {
+            const tabButtons = document.getElementById('tabButtons');
+            tabButtons.classList.toggle('show');
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Close mobile menu after selection
+            const tabButtons = document.getElementById('tabButtons');
+            tabButtons.classList.remove('show');
+        }
+
+        // Simulate dice roll effects
+        document.querySelectorAll('.dice-roll').forEach(dice => {
+            dice.addEventListener('click', function() {
+                this.style.transform = 'scale(1.1)';
+                this.style.boxShadow = '0 0 20px rgba(0, 255, 255, 0.5)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = 'none';
+                }, 200);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c8b7e4f505b09f',t:'MTc2MDEyNjU3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
